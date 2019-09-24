@@ -10,21 +10,24 @@ import { ModalController } from '@ionic/angular';
 export class TodoModalComponent implements OnInit {
 
   @Input() data:any;
-  @Input() type:any;
+  title : string;
   content : any;
 
   constructor(private modalController: ModalController) { }
 
   async close(){
     await this.modalController.dismiss();
-    location.reload();
+    //location.reload();
   }
 
   ngOnInit() {
-    console.log(this.type);
-    if(this.type == "A"){
-      this.content = "qualcosa";
+    console.log(this.data);
+    if(this.data == "A"){
+      this.title = "Accredito";
+    }else{
+      this.title = "Debito"
     }
+
   }
 
 }

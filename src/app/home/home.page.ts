@@ -33,26 +33,14 @@ export class HomePage implements OnInit {
     return this.http.get<HttpResponse<Fondo[]>>(url);
   }
 
-  addDebito(){
-    this.openModal("D"); 
-  }
-  addAccredito(){
-    this.openModal("A");
-  }
 
   
   async openModal(item){
-    let title = "";
-    if(item = "A"){
-      title = "Accredito";
-    }else{
-      title = "Debito"
-    }
+    console.log("Item: ", item);
     const modal = await this.modalController.create({
       component: TodoModalComponent,
       componentProps: {
-        data: title,
-        type:item
+        data: item
       }
 
     })
