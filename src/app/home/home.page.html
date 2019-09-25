@@ -11,18 +11,25 @@
     padding-top: 0px !important;
   }
 
-  .card-purple {
+  .purpleBg {
     background-color: #6625b8 !important;
+
   }
 
   .card-subCustom {
     color: black !important;
-    font-size: 12px;
+    font-size: 10px;
+    
   }
 
   .fontPlus {
     font-size: 20px;
   }
+
+  .fadeIn {
+  animation-name: fadeIn;
+  animation-duration: 4s;
+}
 </style>
 <ion-header>
   <ion-toolbar>
@@ -36,13 +43,13 @@
 </ion-header>
 <ion-content>
   <ion-list lines="none">
-    <ion-card class="card-cover card-purple" *ngFor="let fondo of fondiMap">
+    <ion-card  class="card-cover purpleBg fadeIn" *ngFor="let fondo of fondiMap">
       <ion-card-content class="zeroPaddingBottom">
         <p class="fontPlus">Fondo {{fondo.nomeFondo}} : {{fondo.saldo}} €</p>
       </ion-card-content>
       <ion-card-header class="zeroPaddingTop">
         <ion-card-subtitle class="card-cover-subtitle card-subCustom">Sigla : {{fondo.siglaFondo}} | Last Operation :
-          {{fondo.lastOperation}}</ion-card-subtitle>
+          {{fondo.lastOperation | date : 'dd/MM/yyyy HH:mm:ss'}}</ion-card-subtitle>
       </ion-card-header>
 
     </ion-card>
@@ -56,7 +63,7 @@
       <ion-fab-button color="dark" (click)="openModal('D')">D</ion-fab-button>
     </ion-fab-list>
     <ion-fab-list side="start">
-      <ion-fab-button color="dark" (click)="openModal('A')">A</ion-fab-button>
+      <ion-fab-button color="dark" (click)="openModal('C')">C</ion-fab-button>
     </ion-fab-list>
   </ion-fab>
 </ion-content>
