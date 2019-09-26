@@ -1,8 +1,8 @@
 {
-  "name": "diamond-design-framework",
+  "name": "Fondivide App",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "Antonio De Cusati",
+  "homepage": "www.antoniodecusati.it",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
