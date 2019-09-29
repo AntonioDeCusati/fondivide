@@ -7,5 +7,5 @@ export class Fondo {
     percRipart:number;
     saldo:number;
     lastOperation:string;
-    altro2:string
+    fondoFisso:number
 }

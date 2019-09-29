@@ -1,9 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Fondo } from '../model/fondo.model';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
+import { RequestOptions, Headers , Http } from '@angular/http';
+import { catchError } from 'rxjs/operators';
+import { Movimento } from '../model/movimento.model';
+
 
 @Component({
   selector: 'app-todo-modal',
@@ -12,7 +16,10 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 })
 export class TodoModalComponent implements OnInit {
 
+  private urlGetFondo = "http://www.antoniodecusati.it/connDb/project/fondivide/api/getAllFondi.php";
+  private urlAddAccredito = "http://www.antoniodecusati.it/connDb/project/fondivide/api/addMovimentoAccredito.php";
   @Input() data: any;
+  movimento: Movimento;
   title: string;
   content: any;
   fondo: any;
@@ -22,14 +29,15 @@ export class TodoModalComponent implements OnInit {
   itemSaved = {};
 
   idFondo: number;
-  descrizione: string ;
-  valore: number ;
+  descrizione: string;
+  valore: number;
   saldoDaRipartire: number;
-  categoria: string ;
-  sottocategoria: string ;
-  luogo: string ;
+  categoria: string;
+  sottocategoria: string;
+  luogo: string;
   date: Date;
 
+  
 
   constructor(private modalController: ModalController, private http: HttpClient, public toastController: ToastController) { }
 
@@ -43,15 +51,6 @@ export class TodoModalComponent implements OnInit {
     if (this.data == "C") {
       this.title = "Credito";
       //text,number,date,toogle
-
-      this.itemsModal = [
-        { 'title': 'Descrizione', 'id': 'descrizione', 'type': 'text' },
-        { 'title': 'Valore', 'id': 'valore', 'type': 'number' },
-        { 'title': 'Saldo da Ripartire', 'id': 'saldoDaRipartire', 'type': 'number' },
-        { 'title': 'Categoria', 'id': 'categoria', 'type': 'text' },
-        { 'title': 'Sottocategoria', 'id': 'sottocategoria', 'type': 'text' },
-        { 'title': 'Luogo', 'id': 'luogo', 'type': 'text' },
-        { 'title': 'Data', 'id': 'date', 'type': 'date' }]
     } else {
       this.title = "Debito"
     }
@@ -59,7 +58,7 @@ export class TodoModalComponent implements OnInit {
   }
 
   loadFondiId() {
-    this.fondi = this.getFondi("http://www.antoniodecusati.it/connDb/project/fondivide/api/getAllFondi.php");
+    this.fondi = this.getFondi(this.urlGetFondo);
     this.fondi.subscribe((res) => this.fondiMap = res);
   }
 
@@ -68,16 +67,33 @@ export class TodoModalComponent implements OnInit {
     return this.http.get<HttpResponse<Fondo[]>>(url);
   }
 
-  save() {
-    console.log("IdFondo: ", this.idFondo);
-    console.log("Desc: ", this.descrizione);
-    console.log("Val: ", this.valore);
-    console.log("Data: ", this.date);
-    // this.presentToast();
-    //setTimeout(()=>{this.modalController.dismiss() }, 2000);
+  addCredito(movimento : Movimento): Observable<HttpResponse<Movimento>> {
+    console.log("Dio cane: " , movimento);
+    let  headers = new Headers({ 'Access-Control-Allow-Origin': '*'});
+    headers.append('Access Control Allow MethodAccess Control Allow Methods','GET,POST');
+    let options = new RequestOptions({headers : headers});
+    return this.http.post<HttpResponse<Movimento>>(this.urlAddAccredito,JSON.stringify(movimento)); 
   }
 
-  
+  save() {
+    this.movimento = new Movimento;
+    this.movimento.idFondo = this.idFondo;
+    this.movimento.descrizione = this.descrizione;
+    this.movimento.valore = this.valore;
+    this.movimento.categoria = this.categoria;
+    this.movimento.sottocategoria = this.sottocategoria;
+    this.movimento.luogo = this.luogo;
+    this.movimento.saldoDaRipartire = this.saldoDaRipartire;
+    this.movimento.data = this.date;
+
+    console.log("Movimento: ", this.movimento);
+    var res = this.addCredito(this.movimento);
+    //res.subscribe((res) => console.log(res));
+    this.presentToast();
+    setTimeout(() => { this.modalController.dismiss() }, 2000);
+  }
+
+
 
   async presentToast() {
     //posso fare il toast con l'errore impostando il colore del toast
@@ -92,4 +108,23 @@ export class TodoModalComponent implements OnInit {
     });
     toast.present();
   }
+
+  handleErrorObservable (error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    // return an observable with a user-facing error message
+    return throwError(
+      'Something bad happened; please try again later.');
+  };
+
+  
+ 
 }

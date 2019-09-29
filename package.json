@@ -5,7 +5,7 @@
   "homepage": "http:\\www.antoniodecusati.it",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config proxyconfig.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -63,7 +63,7 @@
     "tslint": "~5.16.0",
     "typescript": "~3.1.6"
   },
-  "description": "An Ionic project",
+  "description": "Money managment",
   "cordova": {
     "plugins": {
       "cordova-plugin-statusbar": {},

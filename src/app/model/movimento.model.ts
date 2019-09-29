@@ -1,10 +1,11 @@
 export class Movimento {
     idFondo:number;
-    nomeFondo:string;
-    siglaFondo:string;
-    percRipart:number;
-    saldo:number;
-    lastOperation:string;
-    altro1:string;
-    altro2:string
+    valore:number;
+    descrizione:string;
+    luogo:string;
+    debAcc:string;
+    data:Date;
+    categoria:string;
+    sottocategoria:string;
+    saldoDaRipartire:number;
 }
