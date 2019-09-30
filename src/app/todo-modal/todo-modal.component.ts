@@ -8,6 +8,7 @@ import { RequestOptions, Headers , Http } from '@angular/http';
 import { catchError } from 'rxjs/operators';
 import { Movimento } from '../model/movimento.model';
 
+
 @Component({
   selector: 'app-todo-modal',
   templateUrl: './todo-modal.component.html',
@@ -68,14 +69,10 @@ export class TodoModalComponent implements OnInit {
 
   addCredito(movimento : Movimento): any {
     let  headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*'});
-    headers.append('Access Control Allow MethodAccess Control Allow Methods','*');
-    return this.http.post(this.urlAddAccredito,movimento,{headers : headers, params : { movimento : JSON.stringify(movimento)},
-      responseType: "json"}).subscribe(
-      data  => {
-        console.log("POST Request is successful ", data);
-      },
-      error  => {
-        console.log("Error POST : ", error);
+    return this.http.post(this.urlAddAccredito,movimento,{headers : headers,observe: "body", params : { movimento : JSON.stringify(movimento)}})
+      .subscribe(
+      result => {
+        console.log("Result : ", result);
       }
       );
   }
@@ -101,6 +98,16 @@ export class TodoModalComponent implements OnInit {
     setTimeout(() => { this.modalController.dismiss() }, 2000);
   }
 
+  changeValue(obj){
+   
+    if(this.saldoDaRipartire > this.valore){
+      console.log("This value: ", this.valore);
+      console.log("This saldoDaRip: " , this.saldoDaRipartire);  
+      console.log("Azzera saldo da ripartire")
+      this.saldoDaRipartire == 0;
+    }
+    console.log("Obj :" , obj);
+  }
 
 
   async presentToast() {

@@ -37,7 +37,8 @@
   </ion-item>
   <ion-item *ngIf="data=='C'">
     <ion-label position="floating"> Saldo da Ripartire</ion-label>
-    <ion-input [(ngModel)]="saldoDaRipartire" name="saldoDaRipartire" type="number" max={{valore}}></ion-input>
+    <ion-input [(ngModel)]="saldoDaRipartire" name="saldoDaRipartire" (change)="changeValue(this)" type="number" [max] = " valore" 
+    [disabled]='(!idFondo && idFondo == "1")'  max={{valore}}></ion-input>
   </ion-item>
   <ion-item *ngIf="data=='C'">
     <ion-label position="floating"> Categoria</ion-label>
