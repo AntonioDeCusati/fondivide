@@ -4,7 +4,7 @@ export class Movimento {
     descrizione:string;
     luogo:string;
     debAcc:string;
-    data:Date;
+    data:number;
     categoria:string;
     sottocategoria:string;
     saldoDaRipartire:number;

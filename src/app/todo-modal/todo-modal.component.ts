@@ -3,11 +3,10 @@ import { ModalController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
 import { Observable, throwError } from 'rxjs';
 import { Fondo } from '../model/fondo.model';
-import { HttpClient, HttpResponse, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import { RequestOptions, Headers , Http } from '@angular/http';
 import { catchError } from 'rxjs/operators';
 import { Movimento } from '../model/movimento.model';
-
 
 @Component({
   selector: 'app-todo-modal',
@@ -23,8 +22,8 @@ export class TodoModalComponent implements OnInit {
   title: string;
   content: any;
   fondo: any;
-  fondi: Observable<HttpResponse<Fondo[]>>;
-  fondiMap: HttpResponse<Fondo[]>;
+  fondi: any;//Observable<HttpResponse<Fondo[]>>;
+  fondiMap: any;//HttpResponse<Fondo[]>;
   itemsModal: Array<{}>;
   itemSaved = {};
 
@@ -35,7 +34,7 @@ export class TodoModalComponent implements OnInit {
   categoria: string;
   sottocategoria: string;
   luogo: string;
-  date: Date;
+  date: number;
 
   
 
@@ -62,17 +61,23 @@ export class TodoModalComponent implements OnInit {
     this.fondi.subscribe((res) => this.fondiMap = res);
   }
 
-  getFondi(url): Observable<HttpResponse<Fondo[]>> {
+  getFondi(url): any {
     // now returns an Observable of Config
-    return this.http.get<HttpResponse<Fondo[]>>(url);
+    return this.http.get(url);
   }
 
-  addCredito(movimento : Movimento): Observable<HttpResponse<Movimento>> {
-    console.log("Dio cane: " , movimento);
-    let  headers = new Headers({ 'Access-Control-Allow-Origin': '*'});
-    headers.append('Access Control Allow MethodAccess Control Allow Methods','GET,POST');
-    let options = new RequestOptions({headers : headers});
-    return this.http.post<HttpResponse<Movimento>>(this.urlAddAccredito,JSON.stringify(movimento)); 
+  addCredito(movimento : Movimento): any {
+    let  headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*'});
+    headers.append('Access Control Allow MethodAccess Control Allow Methods','*');
+    return this.http.post(this.urlAddAccredito,movimento,{headers : headers, params : { movimento : JSON.stringify(movimento)},
+      responseType: "json"}).subscribe(
+      data  => {
+        console.log("POST Request is successful ", data);
+      },
+      error  => {
+        console.log("Error POST : ", error);
+      }
+      );
   }
 
   save() {
@@ -84,11 +89,14 @@ export class TodoModalComponent implements OnInit {
     this.movimento.sottocategoria = this.sottocategoria;
     this.movimento.luogo = this.luogo;
     this.movimento.saldoDaRipartire = this.saldoDaRipartire;
-    this.movimento.data = this.date;
+   
+    var d = new Date(this.date);
+    var n = d.getTime();
+    this.movimento.data = n;
 
     console.log("Movimento: ", this.movimento);
-    var res = this.addCredito(this.movimento);
-    //res.subscribe((res) => console.log(res));
+    var res = this.addCredito(this.movimento)
+    //res;
     this.presentToast();
     setTimeout(() => { this.modalController.dismiss() }, 2000);
   }
@@ -109,22 +117,5 @@ export class TodoModalComponent implements OnInit {
     toast.present();
   }
 
-  handleErrorObservable (error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
-    }
-    // return an observable with a user-facing error message
-    return throwError(
-      'Something bad happened; please try again later.');
-  };
-
-  
  
 }
