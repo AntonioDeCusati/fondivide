@@ -11,7 +11,7 @@
       </ion-button>
 
     </ion-buttons>
-    <ion-title>
+    <ion-title (click)="logElements()">
       {{title}}
     </ion-title>
 
@@ -21,7 +21,7 @@
 <ion-content padding>
   <ion-item>
     <ion-label position="floating">Seleziona Fondo</ion-label>
-    <ion-select [(ngModel)]="idFondo">
+    <ion-select [(ngModel)]="idFondo" (ngModelChange)="refreshVisibility()">
       <ion-select-option *ngIf="data=='C'" value="null">Ripartisci</ion-select-option>
       <ion-select-option *ngFor="let fondo of fondiMap" value={{fondo.idFondo}}>{{fondo.nomeFondo}}
       </ion-select-option>
@@ -35,10 +35,11 @@
     <ion-label position="floating"> Valore</ion-label>
     <ion-input [(ngModel)]="valore" name="valore" type="number"></ion-input>
   </ion-item>
-  <ion-item *ngIf="data=='C'">
+  <ion-item *ngIf="data=='C'" [color]="saldoErrorClass ? 'danger' : ''">
     <ion-label position="floating"> Saldo da Ripartire</ion-label>
-    <ion-input [(ngModel)]="saldoDaRipartire" name="saldoDaRipartire" (change)="changeValue(this)" type="number" [max] = " valore" 
-    [disabled]='(!idFondo && idFondo == "1")'  max={{valore}}></ion-input>
+    <ion-input [(ngModel)]="saldoDaRipartire"  [color]="saldoErrorClass ? 'danger' : ''"
+    [disabled] = "saldoBooleanTrue == false" (ngModelChange)="refreshVisibilityFromValue()"
+    name="saldoDaRipartire" type="number" max={{valore}}></ion-input>
   </ion-item>
   <ion-item *ngIf="data=='C'">
     <ion-label position="floating"> Categoria</ion-label>
