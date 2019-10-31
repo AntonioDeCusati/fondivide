@@ -16,14 +16,14 @@ export class AppComponent {
       icon: 'home'
     },
     {
+      title: 'Lista Movimenti',
+      url: '/list',
+      icon: 'list'
+    },
+    {
       title: 'Home Old',
       url: '/home_old',
       icon: 'home'
-    },
-    {
-      title: 'List',
-      url: '/list',
-      icon: 'list'
     },
 
     {

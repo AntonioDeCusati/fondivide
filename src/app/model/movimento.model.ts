@@ -8,4 +8,6 @@ export class Movimento {
     categoria:string;
     sottocategoria:string;
     saldoDaRipartire:number;
+    arrotondamento:boolean;
+    saldoArrotond:number;
 }

@@ -19,15 +19,45 @@ export class ListPage implements OnInit {
     'bluetooth',
     'build'
   ];
-  public items: Array<{ title: string; note: string; icon: string }> = [];
+  public items: Array<{ valore: number; nameFondo: string; data: number ; descr:string, addAcc: string }> = [];
   constructor() {
-    for (let i = 1; i < 11; i++) {
-      this.items.push({
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-      });
-    }
+    
+    this.items.push({
+      valore: 23,
+      nameFondo: "Svago",
+      data: 1572517937572,
+      descr: "Test 5",
+      addAcc :"D"
+    });
+    this.items.push({
+      valore: 53,
+      nameFondo: "Cassa",
+      data: 1572517937572,
+      descr: "Test 4",
+      addAcc :"C"
+    });
+    this.items.push({
+      valore: 123,
+      nameFondo: "Necessita",
+      data: 1572517937572,
+      descr: "Test 3",
+      addAcc :"D"
+    });
+    this.items.push({
+      valore: 42,
+      nameFondo: "Necessità",
+      data: 1572517937572,
+      descr: "Test 2",
+      addAcc :"D"
+    });
+    this.items.push({
+      valore: 512,
+      nameFondo: "Ripartiti",
+      data: 1572517937572,
+      descr: "Test 1",
+      addAcc :"C"
+    });
+
   }
 
   ngOnInit() {

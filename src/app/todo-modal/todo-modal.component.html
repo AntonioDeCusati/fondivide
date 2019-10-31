@@ -19,44 +19,49 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-item>
-    <ion-label position="floating">Seleziona Fondo</ion-label>
-    <ion-select [(ngModel)]="idFondo" (ngModelChange)="refreshVisibility()">
-      <ion-select-option *ngIf="data=='C'" value="null">Ripartisci</ion-select-option>
-      <ion-select-option *ngFor="let fondo of fondiMap" value={{fondo.idFondo}}>{{fondo.nomeFondo}}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
-  <ion-item *ngIf="data=='C'">
-    <ion-label position="floating"> Descrizione</ion-label>
-    <ion-input [(ngModel)]="descrizione" name="descrizione"></ion-input>
-  </ion-item>
-  <ion-item *ngIf="data=='C'">
-    <ion-label position="floating"> Valore</ion-label>
-    <ion-input [(ngModel)]="valore" name="valore" type="number"></ion-input>
-  </ion-item>
-  <ion-item *ngIf="data=='C'" [color]="saldoErrorClass ? 'danger' : ''">
-    <ion-label position="floating"> Saldo da Ripartire</ion-label>
-    <ion-input [(ngModel)]="saldoDaRipartire"  [color]="saldoErrorClass ? 'danger' : ''"
-    [disabled] = "saldoBooleanTrue == false" (ngModelChange)="refreshVisibilityFromValue()"
-    name="saldoDaRipartire" type="number" max={{valore}}></ion-input>
-  </ion-item>
-  <ion-item *ngIf="data=='C'">
-    <ion-label position="floating"> Categoria</ion-label>
-    <ion-input [(ngModel)]="categoria" name="categoria"></ion-input>
-  </ion-item>
-  <ion-item *ngIf="data=='C'">
-    <ion-label position="floating"> Sottocategoria</ion-label>
-    <ion-input [(ngModel)]="sottocategoria" name="sottocategoria"></ion-input>
-  </ion-item>
-  <ion-item *ngIf="data=='C'">
-    <ion-label position="floating"> Luogo</ion-label>
-    <ion-input [(ngModel)]="luogo" name="luogo"></ion-input>
-  </ion-item>
-  <ion-item *ngIf="data=='C'">
-    <ion-label position="floating"> Data</ion-label>
-    <ion-datetime [(ngModel)]="date" displayFormat="DD/MM/YYYY HH:mm"></ion-datetime>
-  </ion-item>
-  <ion-button class="purpleBg" vertical="bottom" expand="full" (click)="save()">Save</ion-button>
+    <ion-item>
+      <ion-label> Arrotondamento</ion-label>
+      <ion-checkbox [(ngModel)]="arrotondamento" checked="false" color="tertiary" checked slot="start"></ion-checkbox>
+      <ion-input *ngIf="arrotondamento==true" [(ngModel)]="saldoArrotond" name="valore" type="number"></ion-input>
+    </ion-item>
 
+    <ion-item>
+      <ion-label position="floating">Seleziona Fondo</ion-label>
+      <ion-select [(ngModel)]="idFondo" (ngModelChange)="refreshVisibility()">
+        <ion-select-option *ngIf="data=='C'" value="null">Ripartisci</ion-select-option>
+        <ion-select-option *ngFor="let fondo of fondiMap" value={{fondo.idFondo}}>{{fondo.nomeFondo}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating"> Descrizione</ion-label>
+      <ion-input [(ngModel)]="descrizione" name="descrizione"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating"> Valore</ion-label>
+      <ion-input [(ngModel)]="valore" name="valore" type="number"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="data=='C'" [color]="saldoErrorClass ? 'danger' : ''">
+      <ion-label position="floating"> Saldo da Ripartire</ion-label>
+      <ion-input [(ngModel)]="saldoDaRipartire" [color]="saldoErrorClass ? 'danger' : ''"
+        [disabled]="saldoBooleanTrue == false" (ngModelChange)="refreshVisibilityFromValue()" name="saldoDaRipartire"
+        type="number" max={{valore}}></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating"> Categoria</ion-label>
+      <ion-input [(ngModel)]="categoria" name="categoria"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="data=='C'">
+      <ion-label position="floating"> Sottocategoria</ion-label>
+      <ion-input [(ngModel)]="sottocategoria" name="sottocategoria"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating"> Luogo</ion-label>
+      <ion-input [(ngModel)]="luogo" name="luogo"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating"> Data</ion-label>
+      <ion-datetime [(ngModel)]="date" displayFormat="DD/MM/YYYY HH:mm"></ion-datetime>
+    </ion-item>
+    <ion-button class="purpleBg" vertical="bottom" expand="full" (click)="save()">Save</ion-button>
 </ion-content>

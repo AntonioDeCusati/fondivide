@@ -17,6 +17,7 @@ export class TodoModalComponent implements OnInit {
 
   private urlGetFondo = 'http://www.antoniodecusati.it/connDb/project/fondivide/api/getAllFondi.php';
   private urlAddAccredito = 'http://www.antoniodecusati.it/connDb/project/fondivide/api/addMovimentoAccredito.php';
+  private urlAddAddebito = 'http://www.antoniodecusati.it/connDb/project/fondivide/api/addMovimentoAddebito.php';
   @Input() data: any;
   movimento: Movimento;
   title: string;
@@ -37,6 +38,9 @@ export class TodoModalComponent implements OnInit {
   sottocategoria: string;
   luogo: string;
   date: number;
+
+  arrotondamento= false;
+  saldoArrotond : number;
 
 
 
@@ -84,26 +88,68 @@ export class TodoModalComponent implements OnInit {
       }
     );
   }
-
+  
+  addAddebito(movimento: Movimento): any {
+    const headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*' });
+    headers.append('Access Control Allow MethodAccess Control Allow Methods', '*');
+    return this.http.post(this.urlAddAddebito, movimento, {
+      headers, params: { movimento: JSON.stringify(movimento) },
+      responseType: 'json'
+    }).subscribe(
+      data => {
+        console.debug('POST Request is successful ', data);
+      },
+      error => {
+        console.debug('Error POST : ', error);
+      }
+    );
+  }
+  
   save() {
-    this.movimento = new Movimento;
-    this.movimento.idFondo = this.idFondo;
-    this.movimento.descrizione = this.descrizione;
-    this.movimento.valore = this.valore;
-    this.movimento.categoria = this.categoria;
-    this.movimento.sottocategoria = this.sottocategoria;
-    this.movimento.luogo = this.luogo;
-    this.movimento.saldoDaRipartire = this.saldoDaRipartire;
+    console.log(this.data);
+    if(this.data == "C"){ 
+      this.movimento = new Movimento;
+      this.movimento.idFondo = this.idFondo;
+      this.movimento.descrizione = this.descrizione;
+      this.movimento.valore = this.valore;
+      this.movimento.categoria = this.categoria;
+      this.movimento.sottocategoria = this.sottocategoria;
+      this.movimento.luogo = this.luogo;
+      this.movimento.saldoDaRipartire = this.saldoDaRipartire;
+  
+      const d = new Date(this.date);
+      const n = d.getTime();
+      this.movimento.data = n;
+  
+      console.debug('Movimento: ', this.movimento);
+      const res = this.addCredito(this.movimento);
+      // res; TODO gestire response
+      this.presentToast('success',1500,'Your settings have been saved.');
+      setTimeout(() => { this.modalController.dismiss(); }, 2000);
+    } else {
+      
+      //qui
+      this.movimento = new Movimento;
+      this.movimento.idFondo = this.idFondo;
+      this.movimento.descrizione = this.descrizione;
+      this.movimento.valore = this.valore;
+      this.movimento.categoria = this.categoria;
+      this.movimento.luogo = this.luogo;
+      this.movimento.arrotondamento= this.arrotondamento;
+      this.movimento.saldoArrotond=this.saldoArrotond;
 
-    const d = new Date(this.date);
-    const n = d.getTime();
-    this.movimento.data = n;
-
-    console.debug('Movimento: ', this.movimento);
-    const res = this.addCredito(this.movimento);
-    // res;
-    this.presentToast('success',1500,'Your settings have been saved.');
-    setTimeout(() => { this.modalController.dismiss(); }, 2000);
+  
+      const d = new Date(this.date);
+      const nD = d.getTime();
+      this.movimento.data = nD;
+  
+      console.debug('Movimento: ', this.movimento);
+      const res = this.addAddebito(this.movimento);
+        // res; TODO gestire response
+      this.presentToast('success',1500,'Your settings have been saved.');
+      setTimeout(() => { this.modalController.dismiss(); }, 2000);
+    }
+    
   }
 
   refreshVisibility() {
