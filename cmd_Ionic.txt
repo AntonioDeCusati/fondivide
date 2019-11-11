@@ -1,0 +1,15 @@
+--Dun device
+ionic serve --lab
+
+
+
+--Build
+ionic cordova build android --device
+
+--Creare firma
+	keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 10000
+	keytool -importkeystore -srckeystore my-release-key.keystore -destkeystore my-release-key.keystore -deststoretype pkcs12
+	jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore <FILE.APK> alias_name
+
+--Firmare app
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore 

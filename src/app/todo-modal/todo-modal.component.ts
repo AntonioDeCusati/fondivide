@@ -15,9 +15,10 @@ import { Movimento } from '../model/movimento.model';
 })
 export class TodoModalComponent implements OnInit {
 
-  private urlGetFondo = 'http://www.antoniodecusati.it/connDb/project/fondivide/api/getAllFondi.php';
-  private urlAddAccredito = 'http://www.antoniodecusati.it/connDb/project/fondivide/api/addMovimentoAccredito.php';
-  private urlAddAddebito = 'http://www.antoniodecusati.it/connDb/project/fondivide/api/addMovimentoAddebito.php';
+  private urlGetFondo = 'https://www.antoniodecusati.it/connDb/project/fondivide/api/getAllFondi.php';
+  private urlAddAccredito = 'https://www.antoniodecusati.it/connDb/project/fondivide/api/addMovimentoAccredito.php';
+  private urlAddAddebito = 'https://www.antoniodecusati.it/connDb/project/fondivide/api/addMovimentoAddebito.php';
+  
   @Input() data: any;
   movimento: Movimento;
   title: string;
@@ -42,6 +43,8 @@ export class TodoModalComponent implements OnInit {
   arrotondamento= false;
   saldoArrotond : number;
 
+  headersProp : HttpHeaders;
+
 
 
   constructor(private modalController: ModalController, private http: HttpClient, public toastController: ToastController) { }
@@ -51,6 +54,12 @@ export class TodoModalComponent implements OnInit {
   }
 
   ngOnInit() {
+    
+    this.headersProp.append('Access-Control-Allow-Origin' , '*');
+    this.headersProp.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+    this.headersProp.append('Accept','application/json');
+    this.headersProp.append('content-type','application/json');
+    this.headersProp.append('Access Control Allow MethodAccess Control Allow Methods', '*');
     console.debug(this.data);
     this.loadFondiId();
     this.refreshVisibility();
@@ -74,8 +83,8 @@ export class TodoModalComponent implements OnInit {
   }
 
   addCredito(movimento: Movimento): any {
-    const headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*' });
-    headers.append('Access Control Allow MethodAccess Control Allow Methods', '*');
+    const headers = this.headersProp;
+    
     return this.http.post(this.urlAddAccredito, movimento, {
       headers, params: { movimento: JSON.stringify(movimento) },
       responseType: 'json'
@@ -90,7 +99,7 @@ export class TodoModalComponent implements OnInit {
   }
   
   addAddebito(movimento: Movimento): any {
-    const headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*' });
+    const headers = this.headersProp;
     headers.append('Access Control Allow MethodAccess Control Allow Methods', '*');
     return this.http.post(this.urlAddAddebito, movimento, {
       headers, params: { movimento: JSON.stringify(movimento) },

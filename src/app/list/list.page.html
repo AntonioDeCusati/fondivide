@@ -11,10 +11,22 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let item of items" [ngClass]="item.addAcc == 'C' ? backGrCred : backGrDeb">
-      {{item.valore}} | {{item.nameFondo}} | {{item.data}} | {{item.descr}} | {{item.addAcc}}
-      
-    </ion-item>
+    <ion-card class="card-cover fadeIn" *ngFor="let item of items" [ngClass]="item.addAcc">
+      <ion-card-content class="pb-0-pt-2 col-12">
+        <ion-card-content class="pb-0-pt-2 fl-left col-4 saldo">
+          <b>{{item.valore}} €</b>
+        </ion-card-content>
+        <ion-card-header class="pb-0-pt-2 col-8 fl-left mar-0">
+          <ion-card-content class="pb-0-pt-2 col-3 txt-xs mar-0">
+            {{item.data | date : 'dd/MM/yyyy HH:mm:ss'}} <span style="padding-left:7em">  {{item.nameFondo}}</span>
+          </ion-card-content>
+          <ion-card-content class="pb-0-pt-2 col-8 mar-0">
+            {{item.descrizione}}
+          </ion-card-content>
+        </ion-card-header>
+      </ion-card-content>
+
+    </ion-card>
   </ion-list>
   <!--
     <div *ngIf="selectedItem" padding>

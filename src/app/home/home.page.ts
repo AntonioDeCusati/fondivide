@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Fondo } from '../model/fondo.model';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { ModalController } from '@ionic/angular';
 import { TodoModalComponent } from '../todo-modal/todo-modal.component';
+import { RequestOptions } from '@angular/http';
 
 @Component({
   selector: 'app-home',
@@ -25,13 +26,18 @@ export class HomePage implements OnInit {
   }
 
   loadFondi() {
-    this.fondi = this.getFondi("http://www.antoniodecusati.it/connDb/project/fondivide/api/getAllFondi.php");
+    this.fondi = this.getFondi("https://www.antoniodecusati.it/connDb/project/fondivide/api/getAllFondi.php");
     this.fondi.subscribe((res) => this.fondiMap = res);
   }
 
   getFondi(url): Observable<HttpResponse<Fondo[]>> {
     // now returns an Observable of Config
-    return this.http.get<HttpResponse<Fondo[]>>(url);
+    var headersProp = new HttpHeaders();
+    headersProp.append('Access-Control-Allow-Origin' , '*');
+    headersProp.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+    headersProp.append('Accept','application/json');
+    headersProp.append('content-type','application/json');
+    return this.http.get<HttpResponse<Fondo[]>>(url, {headers: headersProp});
   }
 
 
